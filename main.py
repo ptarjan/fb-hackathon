@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import json
+import simplejson as json
 import os
 import urllib, urllib2, urlparse
 
@@ -31,8 +31,10 @@ class MainHandler(webapp.RequestHandler):
 
   def getFriends(self):
     graph = self.getFBGraph()
-    friends = graph.get_connections("me", "friends")['data']
-    return sorted(friends, key=lambda friend: friend['name'])
+    if graph:
+      friends = graph.get_connections("me", "friends")['data']
+      return sorted(friends, key=lambda friend: friend['name'])
+    return []
 
   def post(self):
     return self.get()

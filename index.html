@@ -16,6 +16,7 @@ Hack Submission
   display: none;
 }
 #login {
+  display: none;
   margin: 10px 1%;
 }
 </style>
@@ -154,9 +155,19 @@ Other Hackers
 <script>
 $(function() {
   window.fbAsyncInit = function() {
-    FB.Event.subscribe('auth.login', function() {
-      $('#hack_form').show();
-      $('#login').hide();
+    FB.Event.subscribe('auth.login', function(response) {
+      if (response.session) {
+        // Get the friends (I don't care about people with 0 friends)
+        if ($('#other_hackers').children().length == 0) {
+          document.location.reload();
+        }
+        $('#hack_form').show();
+      } else {
+        $('#login').show();
+      }
+    });
+
+    FB.getLoginStatus(function(response) {
     });
     FB.init({appId: '136348336398305', status: true, cookie: true,
              xfbml: true});
@@ -194,7 +205,7 @@ $('form').submit(function () {
 $('form').submit(function () {
   var names = [];
   $('#other_hackers :selected').each(function() {
-    names.push($(this).text()); 
+    names.push('@['+$(this).attr('name')+':2048:'+$(this).text()+']');
   });
   if (names.length > 0) {
     names = '\n\nBuilt with '+names.join(', ');
@@ -220,7 +231,7 @@ $('form').submit(function () {
   }
   var data = {
     method: 'stream.publish',
-    message: 'Hack: '+$('#name').val()+'.'+names,
+    message: $('#name').val()+'.'+names,
     attachment: {
       name: $('#name').val(),
       description: $('#description').val(),
@@ -229,12 +240,14 @@ $('form').submit(function () {
         { type: 'image', src: $('#screenshot_url').val(), href: $('#screenshot_url').val() }
       ],
     },
-    action_links: [
-      { text: 'View Code', href: $('#github_url').val() },
-    ],
     target_id: $('#eid').val(),
     user_message: {value: 'Submit your hack.'},
   };
+  if ($('#github_url').val() && $('#github_url').val() != 'http://') {
+    data['action_links'] = [
+      { text: 'View Code', href: $('#github_url').val() },
+    ];
+  }
   FB.ui(data, function(response) {
     if (response && response.post_id) {
       alert('Submission was published. Go get everyone to like it.');
