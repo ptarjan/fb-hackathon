@@ -24,7 +24,6 @@ class MainHandler(webapp.RequestHandler):
       return graph
     
   def getEventName(self, eid):
-    return 'Placeholder until push'
     result = urllib2.urlopen('https://graph.facebook.com/'+eid)
     data = json.loads(result.read())
     return data['name']
