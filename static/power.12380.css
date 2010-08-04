@@ -1,0 +1,59 @@
+/* ----- Powered By ----- */
+
+a.power{
+	display:inline-block;
+	visibility:visible;
+	margin:5px auto 25px auto;
+	padding:5px 14px;
+	text-align:center;
+	font-size:85%;
+	text-decoration:none;
+	background:#EAEAEA url(/images/white-grad.png) repeat-x left top;
+	border:1px solid #dedede;
+	border-right:1px solid #bbb;
+	border-bottom:1px solid #bfbfbf;
+	color:#555 !important;
+	-webkit-border-radius:17px;
+	-moz-border-radius:17px;
+	border-radius:17px;
+	-webkit-box-shadow:rgba(0,0,0,.15) 0px 2px 7px;
+	-moz-box-shadow:rgba(0,0,0,.15) 0px 2px 7px;
+	box-shadow:rgba(0,0,0,.15) 0px 2px 7px;
+	outline:none;
+	line-height:24px;
+}
+a.power strong{
+	display:inline-block !important;
+	margin:0 -3px -7px -6px;
+	text-indent:-9000px;
+	width:62px;
+	height:24px;
+	background:url(/images/powerlogo.png) no-repeat;
+}
+* html a.power strong{
+	margin-bottom:0px;
+}
+*+html a.power strong{
+	margin-bottom:0px;
+}
+* html a.power strong, * html a.powertiny span{
+	_background-image: none;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="/images/powerlogo.png", sizingMethod="crop");
+}
+a.power:hover{
+	border-color:#aaa;
+	border-right:1px solid #aaa;
+	border-bottom:1px solid #aaa;
+}
+a.power:active{
+	border-color:#dedede;
+	background: #FFF url(/images/white-grad-active.png) repeat-x left top;
+	-webkit-box-shadow:none;
+	-moz-box-shadow:none;
+	box-shadow:none;
+}
+
+* html #public a.powertiny span{
+	margin-top:7px !important;
+	margin-bottom:-8px !important;
+}

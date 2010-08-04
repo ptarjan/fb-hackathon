@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+ 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head> 
+ 
+<title> 
+Hack Submission
+</title> 
+ 
+<!-- CSS --> 
+<link rel="stylesheet" href="/static/dynamic.12380.css" type="text/css" /> 
+<link rel="stylesheet" href="/static/power.12380.css" type="text/css" /> 
+<style>
+#hack_form {
+  display: none;
+}
+#login {
+  margin: 10px 1%;
+}
+form .instruct {
+  margin-top: 26px;
+}
+</style>
+ 
+<!-- JavaScript --> 
+<script type="text/javascript" src="/static/dynamic.12380.js"></script> 
+</head> 
+ 
+<div id="container"> 
+
+<form id="form1" name="form1" class="wufoo topLabel page1" autocomplete="off" enctype="multipart/form-data" method="post" action="">
+ 
+<div class="info"> 
+<h2>Hack Submission</h2> 
+<div>Submit your hack</div> 
+</div> 
+
+<div id="login">
+  <fb:login-button perms="publish_stream"></fb:login-button> 
+</div>
+
+<ul id="hack_form"> 
+ 
+ 
+<li id="fo1li12" class="      "> 
+Hackathon Event
+<div> 
+  <a href="http://facebook.com/event.php?eid={{ eid }}">{{ event.name }}</a>
+  <input type="hidden" name="eid" id="eid" value="{{ eid }}" />
+</div> 
+</li> 
+ 
+ 
+<li id="fo1li3" class="     "> 
+<label class="desc" id="title3" for="name"> 
+Hack Name
+<span id="req_3" class="req">*</span> 
+</label> 
+<div> 
+<input id="name" name="name" type="text" class="field text large" value="" maxlength="255" tabindex="2" onkeyup="handleInput(this); validateRange(3, 'character');" onchange="handleInput(this);" /> 
+</div> 
+<p class="instruct" id="instruct3"><small>Short and catchy.</small></p> 
+</li> 
+ 
+ 
+<li id="fo1li4" 
+class="     "> 
+ 
+ 
+<label class="desc" id="title4" for="description"> 
+Description
+<span id="req_4" class="req">*</span> 
+</label> 
+ 
+<div> 
+<textarea id="description" name="description" class="field textarea small" rows="10" cols="50" tabindex="3"
+onkeyup="handleInput(this); validateRange(4, 'character');"
+onchange="handleInput(this);"
+ ></textarea> 
+</div> 
+ 
+<p class="instruct" id="instruct4"><small>What does it do?</small></p> 
+ 
+ 
+</li> 
+ 
+ 
+<li id="fo1li6" class="      "> 
+<label class="desc" id="title6" for="hack_url"> 
+Hack URL
+<span id="req_6" class="req">*</span> 
+</label> 
+<div> 
+<input id="hack_url" name="hack_url" type="text" class="field text large" value="http://" maxlength="255" tabindex="4" onkeyup="handleInput(this);" onchange="handleInput(this);" />
+</div> 
+<p class="instruct" id="instruct6"><small>Where can we try your hack? If it doesn't have a URL, just put a link to a page describing it.</small></p> 
+</li> 
+ 
+ 
+<li id="fo1li7" class="      "> 
+<label class="desc" id="title7" for="github_url"> 
+Github URL
+</label> 
+<div> 
+<input id="github_url" name="github_url" type="text" class="field text large" value="http://" maxlength="255" tabindex="5" onkeyup="handleInput(this);" onchange="handleInput(this);" /> 
+</div> 
+<p class="instruct" id="instruct7"><small>We like Open Source. Put it on github if you can.</small></p> 
+</li> 
+ 
+ 
+<li id="fo1li8" class="      "> 
+<label class="desc" id="title8" for="screenshot_url"> 
+Screenshot URL
+<span id="req_8" class="req">*</span> 
+</label> 
+<div> 
+<input id="screenshot_url" name="screenshot_url" type="text" class="field text large" value="http://" maxlength="255" tabindex="6" onkeyup="handleInput(this);" onchange="handleInput(this);" /> 
+</div> 
+<p class="instruct" id="instruct8"><small>A picture is worth a thousand words. You can upload your screenshot to github and post the raw url</small></p> 
+</li> 
+
+ 
+<li id="fo1li9" class="      "> 
+<label class="desc" id="title9" for="other_hackers"> 
+Other Hackers
+</label> 
+<div> 
+<select id="other_hackers" name="other_hackers" class="field large" tabindex="7" multiple>
+{% for friend in friends %}
+<option name="{{ friend.id }}">{{ friend.name }}</option>
+{% endfor %}
+</select>
+</div> 
+
+<p class="instruct" id="instruct9"><small>Who else built this with you? Hold Control or ⌘ to select multiple.</small></p> 
+</li> 
+ 
+ 
+<li class="buttons "> 
+<div> 
+<input id="saveForm" name="saveForm" class="btTxt submit" type="submit" value="Submit" tabindex="8" /> 
+</div> 
+</li> 
+ 
+</ul> 
+</form> 
+ 
+</div><!--container--> 
+
+<script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+<div id="fb-root"></div>
+<script>
+$(function() {
+  window.fbAsyncInit = function() {
+    FB.Event.subscribe('auth.login', function(response) {
+      if (response.session) {
+        // Get the friends (I don't care about people with 0 friends)
+        if ($('#other_hackers').children().length == 0) {
+          document.location.reload();
+        }
+        $('#hack_form').show();
+        $('#login').hide();
+      }
+    });
+    FB.init({appId: '136348336398305', status: true, cookie: true,
+             xfbml: true});
+  };
+  (function() {
+    var e = document.createElement('script'); e.async = true;
+    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+    // e.src = 'http://www.ptarjan.dev229.facebook.com/assets.php/en_US/all.js';
+    document.getElementById('fb-root').appendChild(e);
+  }());
+});
+</script>
+
+<script>
+$(function() {
+/*
+$('form').submit(function () {
+  FB.api($('#eid').val() + '/feed', 'post', {
+    'message': $('#name').val(),
+    'picture': $('#screenshot_url').val(),
+    'caption': $('#github_url').val(),
+    'description': $('#description').val(),
+    'name': $('#name').val(),
+    'link': $('#hack_url').val(),
+  }, function(response) {
+    if (typeof response.error !== "undefined") {
+      alert(response.error.message);
+    }
+    console.log(response)
+  });
+  return false;
+});
+*/
+$('form').submit(function () {
+  var names = [];
+  $('#other_hackers :selected').each(function() {
+    names.push('@['+$(this).attr('name')+':2048:'+$(this).text()+']');
+  });
+  names.push('@[{{ me.id }}:2048:{{ me.name }}]');
+  names.sort(function(a, b) {
+    return a.split(':')[2] < b.split(':')[2] ? -1 : 1;
+  });
+
+  names = '\n\nBuilt by '+names.join(', ');
+
+  if (!$('#name').val()) {
+    alert('A hack isn\'t very much without a catchy name.');
+    return false;
+  }
+  if (!$('#description').val()) {
+    alert('Write a description, yo.');
+    return false;
+  }
+  if (!$('#hack_url').val() || $('#hack_url').val() == 'http://') {
+    alert('Where does your hack live? Put in a hack url please.');
+    return false;
+  }
+  if (!$('#screenshot_url').val() || $('#screenshot_url').val() == 'http://') {
+    alert('A screenshot is worth a thousand words.');
+    return false;
+  }
+
+  var data = {
+    method: 'stream.publish',
+    message: $('#name').val()+names,
+    attachment: {
+      name: $('#name').val(),
+      description: $('#description').val(),
+      href: $('#hack_url').val(),
+      media: [
+        { type: 'image', src: $('#screenshot_url').val(), href: $('#screenshot_url').val() }
+      ],
+    },
+    target_id: $('#eid').val(),
+    user_message: {value: 'Submit your hack.'},
+  };
+  if ($('#github_url').val() && $('#github_url').val() != 'http://') {
+    data['action_links'] = [
+      { text: 'View Code', href: $('#github_url').val() },
+    ];
+  }
+  if (console) {
+    console.log(data);
+  }
+  FB.ui(data, function(response) {
+    if (response && response.post_id) {
+      alert('Submission was published. Go get everyone to like it to win the Community Choice prize.');
+      window.location = 'http://facebook.com/event.php?eid={{ eid }}';
+    } else {
+      alert('Failed. Was everything filled out (and were all the URLs valid)?');
+    }
+  });
+  return false;
+});
+
+});
+</script>
