@@ -18,9 +18,6 @@ Hack Submission
 #login {
   margin: 10px 1%;
 }
-form .instruct {
-  margin-top: 26px;
-}
 </style>
  
 <!-- JavaScript --> 
@@ -157,32 +154,30 @@ style="display:block !important;visibility:visible !important;text-indent:0 !imp
 <script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
 <div id="fb-root"></div>
 <script>
-$(function() {
-  window.fbAsyncInit = function() {
-    FB.Event.subscribe('auth.login', function(response) {
-      if (response.session) {
-        // Get the friends (I don't care about people with 0 friends)
-        if ($('#other_hackers').children().length == 0) {
-          document.location.reload();
-        }
-        $('#hack_form').show();
-        $('#login').hide();
+window.fbAsyncInit = function() {
+  FB.Event.subscribe('auth.login', function(response) {
+    if (response.session) {
+      // Get the friends (I don't care about people with 0 friends)
+      if (jQuery('#other_hackers').children().length == 0) {
+        document.location.reload();
       }
-    });
-    FB.init({appId: '136348336398305', status: true, cookie: true,
-             xfbml: true});
-  };
-  (function() {
-    var e = document.createElement('script'); e.async = true;
-    e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
-    // e.src = 'http://www.ptarjan.dev229.facebook.com/assets.php/en_US/all.js';
-    document.getElementById('fb-root').appendChild(e);
-  }());
-});
+      jQuery('#hack_form').show();
+      jQuery('#login').hide();
+    }
+  });
+  FB.init({appId: '136348336398305', status: true, cookie: true,
+           xfbml: true});
+};
+(function() {
+  var e = document.createElement('script'); e.async = true;
+  e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+  // e.src = 'http://www.ptarjan.dev229.facebook.com/assets.php/en_US/all.js';
+  document.getElementById('fb-root').appendChild(e);
+}());
 </script>
 
 <script>
-$(function() {
+jQuery.noConflict()(function($) {
 /*
 $('form').submit(function () {
   FB.api($('#eid').val() + '/feed', 'post', {
