@@ -2,19 +2,32 @@
 <html>
 <head> 
   <title> 
-  University Hackathon
+  Facebook University Hackathon
   </title> 
+
+  <link rel="stylesheet" href="/static/dynamic.12380.css" type="text/css" /> 
+  <link rel="stylesheet" href="/static/power.12380.css" type="text/css" /> 
+  <style>
+h1 {
+  text-indent: 0;
+  color: white;
+}
+  </style>
 </head> 
 <body>
 
-<h1>University Hackathon</h1>
+<div id="container"> 
+<form class="wufoo">
 
-<h2>Events</h2>
+<div class="info">
+  <h2>Facebook University Hackathon</h2>
+  <div>Events</div>
+</div>
 
 <ul>
 {% for event in events %}
   <li>
-    <a href="/{{ event.eid }}/submit">{{ event.name }} @ {{ event.location }}</a> - {{ event.count }} hacks
+    <a href="/{{ event.eid }}">{{ event.name }}</a> - <a href="/{{ event.eid }}/submit">Submit Hack</a>
   </li>
 {% endfor %}
 </ul>

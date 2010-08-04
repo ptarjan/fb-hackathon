@@ -44,6 +44,9 @@ class MainHandler(BaseHandler):
     path = os.path.join(os.path.dirname(__file__), 'index.html')
     self.response.out.write(template.render(path, template_values))
     
+class EventHandler(webapp.RequestHandler):
+  def get(self, eid):
+     self.redirect('http://www.facebook.com/event.php?eid='+eid)
 
 class EventSubmissionHandler(webapp.RequestHandler):
   def getFBGraph(self):
@@ -86,6 +89,7 @@ class EventSubmissionHandler(webapp.RequestHandler):
 
 def main():
   application = webapp.WSGIApplication([('/', MainHandler),
+                                        ('/([0-9]*)', EventHandler),
                                         ('/([0-9]*)/submit', EventSubmissionHandler)],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
