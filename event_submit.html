@@ -34,7 +34,7 @@ Hack Submission
 </div> 
 
 <div id="login">
-  <fb:login-button perms="publish_stream"></fb:login-button> 
+  <fb:login-button show-faces="true" width="600"></fb:login-button> 
 </div>
 
 <ul id="hack_form"> 
@@ -136,10 +136,10 @@ Other Hackers
  
 <li class="buttons "> 
 <div> 
-<input id="saveForm" name="saveForm" class="btTxt submit" type="submit" value="Submit" tabindex="8" /> 
+<input class="btTxt submit" type="submit" value="Submit" tabindex="8" /> 
 </div> 
 </li> 
- 
+
 </ul> 
 </form> 
 </div><!--container-->
@@ -160,9 +160,9 @@ window.fbAsyncInit = function() {
       // Get the friends (I don't care about people with 0 friends)
       if (jQuery('#other_hackers').children().length == 0) {
         document.location.reload();
+      } else {
+        jQuery('#hack_form').show();
       }
-      jQuery('#hack_form').show();
-      jQuery('#login').hide();
     }
   });
   FB.init({appId: '136348336398305', status: true, cookie: true,
@@ -247,10 +247,11 @@ $('form').submit(function () {
   if (console) {
     console.log(data);
   }
+  
   FB.ui(data, function(response) {
     if (response && response.post_id) {
       alert('Submission was published. Go get everyone to like it to win the Community Choice prize.');
-      window.location = 'http://facebook.com/event.php?eid={{ eid }}';
+      window.location = '/{{ eid }}';
     } else {
       alert('Failed. Was everything filled out (and were all the URLs valid)?');
     }
