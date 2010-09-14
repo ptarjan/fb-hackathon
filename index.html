@@ -33,7 +33,7 @@ img {
 <ul>
 {% for event in events %}
   <li>
-    <a href="/{{ event.eid }}">{{ event.name }}</a> <a href="/{{ event.eid }}/event"><img src="http://www.facebook.com/favicon.ico" /></a> <a href="/{{ event.eid }}/submit">Submit Hack</a>
+    <a href="/{{ event.id }}">{{ event.name }}</a> <a href="/{{ event.id }}/event"><img src="http://www.facebook.com/favicon.ico" /></a> <a href="/{{ event.id }}/submit">Submit Hack</a>
   </li>
 {% endfor %}
 </ul>

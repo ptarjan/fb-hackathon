@@ -41,9 +41,9 @@ class BaseHandler(webapp.RequestHandler):
         return v
   
   def getEvents(self):
-    events = self.fetch('https://api.facebook.com/method/events.get?format=json&uid=114869201895800&oauth_token='+self.getAppOAuthToken())
+    events = self.fetch('https://graph.facebook.com/114869201895800/events?access_token='+self.getAppOAuthToken())['data']
     for event in events:
-      event['count'] = self.getHackCount(event['eid'])
+      event['count'] = self.getHackCount(event['id'])
     return events
     
   def getEvent(self, eid):
