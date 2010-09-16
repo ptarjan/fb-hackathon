@@ -100,7 +100,7 @@ Hack URL
 Github URL
 </label> 
 <div> 
-<input id="github_url" name="github_url" type="text" class="field text large" value="http://" maxlength="255" tabindex="5" onkeyup="handleInput(this);" onchange="handleInput(this);" /> 
+<input id="github_url" name="github_url" type="text" class="field text large" value="http://github.com/.../..." maxlength="255" tabindex="5" onkeyup="handleInput(this);" onchange="handleInput(this);" /> 
 </div> 
 <p class="instruct" id="instruct7"><small>We like Open Source. Put it on github if you can.</small></p> 
 </li> 
@@ -227,7 +227,7 @@ $('form').submit(function () {
 
   var data = {
     method: 'stream.publish',
-    message: $('#name').val()+names,
+    message: 'Hackathon Submission: '+$('#name').val()+names,
     attachment: {
       name: $('#name').val(),
       description: $('#description').val(),
@@ -239,7 +239,7 @@ $('form').submit(function () {
     target_id: $('#eid').val(),
     user_message: {value: 'Submit your hack.'},
   };
-  if ($('#github_url').val() && $('#github_url').val() != 'http://') {
+  if ($('#github_url').val() && $('#github_url').val() != 'http://github.com/.../...') {
     data['action_links'] = [
       { text: 'View Code', href: $('#github_url').val() },
     ];
