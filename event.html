@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <title> 
+  Facebook Camp Hackathon
+  </title> 
+
+  <link rel="stylesheet" href="/static/dynamic.12380.css" type="text/css" /> 
+  <link rel="stylesheet" href="/static/power.12380.css" type="text/css" /> 
+</head> 
+<body>
+<style>
+tr {
+  border-top: 1px solid #ccc;
+}
+td {
+  padding: 10px;
+}
+</style>
+
+<div id="container"> 
+<form class="wufoo">
+
+<div class="info">
+  <h2><a href="http://www.facebook.com/camphackathon">Facebook Camp Hackathon</a></h2>
+  <div>Hacks for <a href="/{{ eid }}/event">{{ event.name }}</a></div>
+</div>
+
+<table>
+  <tr>
+    <th>Hackers</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Screenshot</th>
+  </tr>
+{% for hack in hacks %}
+  <tr class="hack">
+    <!--
+    <input type="button" class="remove" value="Remove" style="visibility:hidden" />
+    -->
+    <td>
+    {% for person in hack.people %}
+      <a href="http://www.facebook.com/profile.php?id={{ person.id }}">
+        <img src="http://graph.facebook.com/{{ person.id }}/picture" title="{{ person.name }}" alt="{{ person.name }}" />
+      </a>
+    {% endfor %}
+    </td>
+    <td>
+      <a target="_new" href="{{ hack.link }}">{{ hack.title|truncatewords:"10" }}</a>
+    </td>
+    <td>
+      <a target="_new" href="{{ hack.link }}">{{ hack.description|truncatewords:"50" }}</a>
+    </td>
+    <td>
+      <a href="{{ hack.screenshot_raw }}">
+        <img src="{{ hack.screenshot }}" />
+      </a>
+    </td>
+  </tr>
+{% endfor %}
+</table>
+
+<input id="randomize" value="randomize" type="button"/>
+
+</div>
+<img id="bottom" src="/static/bottom.png" alt="" />
+
+<script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+<script>
+$(function() {
+  $('#randomize').click(function() {
+    var lis = $('.hack');
+    lis.each(function() {
+      $(this).remove()
+    });
+
+    function RandomSort() { 
+      return Math.floor((Math.random()*lis.length)-1) 
+    } 
+    lis.sort(RandomSort);
+
+    $('table').append(lis);
+    return false;
+  });
+  $('.remove').click(function() {
+    $(this).parent().remove();
+  });
+  $('li').mouseover(function() {
+    $(this).children('.remove').each(function() {
+      this.style.visibility = "visible";
+    });
+  });
+  $('li').mouseout(function() {
+    $(this).children('.remove').each(function() {
+      this.style.visibility = "hidden";
+    });
+  });
+});
+</script>
