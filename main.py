@@ -68,8 +68,14 @@ class MainHandler(BaseHandler):
 
 class EventHandler(BaseHandler):
   def get(self, eid):
+    hacks = []
+    for hack in self.getHacks(eid):
+      if hack.has_key('attribution'):
+        if hack['attribution'] == 'Hackathon Submitter':
+          hacks.append(hack)
+
     template_values = {
-      'hacks' : self.getHacks(eid),
+      'hacks' : hacks,
       'eid'   : eid,
       'event' : self.getEvent(eid),
     }
