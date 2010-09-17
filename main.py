@@ -49,9 +49,40 @@ class BaseHandler(webapp.RequestHandler):
   def getEvent(self, eid):
     return self.fetch('https://graph.facebook.com/'+eid)
 
-  def getHacks(self, eid):
+  def getRawHacks(self, eid):
     feed = self.fetch('https://graph.facebook.com/'+str(eid)+'/feed')
     return feed['data']
+  
+  def getHacks(self, eid):
+    hacks = []
+    for hack in self.getRawHacks(eid):
+      if hack.has_key('attribution'):
+        if hack['attribution'] == 'Hackathon Submitter':
+          hacks.append(hack)
+
+    ret = []
+    for hack in hacks:
+      # hacks need a screenshot
+      if not hack.has_key('picture') :  
+        continue
+
+      people = filter(lambda x: x['id'] != eid, hack['to']['data'])
+      msg = hack['message']
+      banana = msg.split('Built by', 2)
+      title = banana[0].replace('Hackathon Submission: ', '').strip()
+      other_eid, fbid = hack['id'].split('_')
+      # print '\n\n', hack
+
+      ret.append({
+        'title' : title,
+        'people' : people,
+        'screenshot' : hack['picture'],
+        'screenshot_raw' : hack['link'],
+        'description' : hack['description'],
+        'link' : 'http://www.facebook.com/event.php?eid='+eid+'&story_fbid='+fbid,
+      })
+
+    return ret
 
   def getHackCount(self, eid):
     return len(self.getHacks(eid))
@@ -68,14 +99,9 @@ class MainHandler(BaseHandler):
 
 class EventHandler(BaseHandler):
   def get(self, eid):
-    hacks = []
-    for hack in self.getHacks(eid):
-      if hack.has_key('attribution'):
-        if hack['attribution'] == 'Hackathon Submitter':
-          hacks.append(hack)
 
     template_values = {
-      'hacks' : hacks,
+      'hacks' : self.getHacks(eid),
       'eid'   : eid,
       'event' : self.getEvent(eid),
     }
@@ -127,10 +153,10 @@ class EventSubmissionHandler(BaseHandler):
 
 
 def main():
-  application = webapp.WSGIApplication([('/', MainHandler),
-                                        ('/([0-9]*)', EventHandler),
-                                        ('/([0-9]*)/event', EventRedirectHandler),
-                                        ('/([0-9]*)/submit', EventSubmissionHandler)],
+  application = webapp.WSGIApplication([('/+', MainHandler),
+                                        ('/+([0-9]*)/*', EventHandler),
+                                        ('/+([0-9]*)/+event', EventRedirectHandler),
+                                        ('/+([0-9]*)/+submit', EventSubmissionHandler)],
                                        debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 

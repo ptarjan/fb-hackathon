@@ -244,9 +244,6 @@ $('form').submit(function () {
       { text: 'View Code', href: $('#github_url').val() },
     ];
   }
-  if (console) {
-    console.log(data);
-  }
   
   FB.ui(data, function(response) {
     if (response && response.post_id) {
