@@ -23,9 +23,7 @@ Hack Submission
   border: #DD3C10 1px solid;
   padding: 10px;
   text-align: center;
-  {% if isAttending %}
   display: none;
-  {% endif %}
 }
 </style>
  
@@ -176,6 +174,8 @@ window.fbAsyncInit = function() {
       } else {
         {% if isAttending %}
         jQuery('#hack_form').show();
+        {% else %}
+        jQuery('#error').show();
         {% endif %}
       }
     }

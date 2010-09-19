@@ -23,6 +23,10 @@ class UserHandler(webapp.RequestHandler):
     user = facebook.get_user_from_cookie(self.request.cookies, Facebook.appId, Facebook.secret)
     if user:
       graph = facebook.GraphAPI(user["access_token"])
+      try :
+        me = graph.get_object("me")
+      except Exception, e:
+        return None
       return graph
 
   def getFriends(self):
