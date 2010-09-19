@@ -16,7 +16,48 @@ class Facebook:
   appId = '136348336398305'
   secret = '8b664e5066bd0071a52bb728371f2544'
 
-class BaseHandler(webapp.RequestHandler):
+
+
+class UserHandler(webapp.RequestHandler):
+  def getFBGraph(self):
+    user = facebook.get_user_from_cookie(self.request.cookies, Facebook.appId, Facebook.secret)
+    if user:
+      graph = facebook.GraphAPI(user["access_token"])
+      return graph
+
+  def getFriends(self):
+    graph = self.getFBGraph()
+    if graph:
+      friends = graph.get_connections("me", "friends")['data']
+      def getName(friend) :
+        if friend.has_key('name'):
+          return friend['name']
+        return ''
+
+      return sorted(friends, key=getName)
+    return []
+
+  def getMe(self):
+    graph = self.getFBGraph()
+    if graph:
+      return graph.get_object("me")
+    return {}
+
+  def getID(self):
+    return self.getMe()['id']
+
+  def isAttending(self, eid):
+    graph = self.getFBGraph()
+    attending = graph.get_connections(eid, 'attending')['data']
+    my_id = self.getID()
+    for person in attending:
+      if person['id'] == my_id:
+        return True
+    return False
+
+
+
+class AppHandler(webapp.RequestHandler):
   def fetch(self, url, isJson=True):
     logging.error(url)
     try:
@@ -40,8 +81,8 @@ class BaseHandler(webapp.RequestHandler):
       if k == 'access_token':
         return v
   
-  def getEvents(self):
-    events = self.fetch('https://graph.facebook.com/114869201895800/events?access_token='+self.getAppOAuthToken())['data']
+  def getEvents(self, page_id):
+    events = self.fetch('https://graph.facebook.com/'+page_id+'/events?access_token='+self.getAppOAuthToken())['data']
     for event in events:
       event['count'] = self.getHackCount(event['id'])
     return events
@@ -88,16 +129,16 @@ class BaseHandler(webapp.RequestHandler):
     return len(self.getHacks(eid))
 
 
-class MainHandler(BaseHandler):
+class MainHandler(AppHandler):
   def get(self):
     template_values = {
-      'events' : self.getEvents()
+      'events' : self.getEvents('114869201895800')
     }
     path = os.path.join(os.path.dirname(__file__), 'index.html')
     self.response.out.write(template.render(path, template_values))
 
 
-class EventHandler(BaseHandler):
+class EventHandler(AppHandler):
   def get(self, eid):
 
     template_values = {
@@ -113,30 +154,7 @@ class EventRedirectHandler(webapp.RequestHandler):
   def get(self, eid):
      self.redirect('http://www.facebook.com/event.php?eid='+eid)
 
-class EventSubmissionHandler(BaseHandler):
-  def getFBGraph(self):
-    user = facebook.get_user_from_cookie(self.request.cookies, Facebook.appId, Facebook.secret)
-    if user:
-      graph = facebook.GraphAPI(user["access_token"])
-      return graph
-
-  def getFriends(self):
-    graph = self.getFBGraph()
-    if graph:
-      friends = graph.get_connections("me", "friends")['data']
-      def getName(friend) :
-        if friend.has_key('name'):
-          return friend['name']
-        return ''
-
-      return sorted(friends, key=getName)
-    return []
-
-  def getMe(self):
-    graph = self.getFBGraph()
-    if graph:
-      return graph.get_object("me")
-    return {}
+class EventSubmissionHandler(AppHandler, UserHandler):
 
   def post(self, eid):
     return self.get(eid)
@@ -147,6 +165,7 @@ class EventSubmissionHandler(BaseHandler):
       'event' : self.getEvent(eid),
       'friends' : self.getFriends(),
       'me' : self.getMe(),
+      'isAttending' : self.isAttending(eid),
     }
     path = os.path.join(os.path.dirname(__file__), 'event_submit.html')
     self.response.out.write(template.render(path, template_values))
