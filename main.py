@@ -48,11 +48,12 @@ class UserHandler(webapp.RequestHandler):
 
   def isAttending(self, eid):
     graph = self.getFBGraph()
-    attending = graph.get_connections(eid, 'attending')['data']
-    my_id = self.getID()
-    for person in attending:
-      if person['id'] == my_id:
-        return True
+    if graph:
+      attending = graph.get_connections(eid, 'attending')['data']
+      my_id = self.getID()
+      for person in attending:
+        if person['id'] == my_id:
+          return True
     return False
 
 
