@@ -49,7 +49,7 @@ td {
       <a target="_new" href="{{ hack.link }}">{{ hack.title|truncatewords:"10" }}</a>
     </td>
     <td>
-      <a target="_new" href="{{ hack.link }}">{{ hack.description|truncatewords:"50" }}</a>
+      {{ hack.description|truncatewords:"50" }}
     </td>
     <td>
       <a href="{{ hack.screenshot_raw }}">
