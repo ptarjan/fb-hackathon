@@ -109,11 +109,11 @@ Hack URL
  
  
 <li id="fo1li7" class="      "> 
-<label class="desc" id="title7" for="github_url"> 
-Github URL
+<label class="desc" id="title7" for="source_url"> 
+Open Source URL
 </label> 
 <div> 
-<input id="github_url" name="github_url" type="text" class="field text large" value="http://github.com/.../..." maxlength="255" tabindex="5" onkeyup="handleInput(this);" onchange="handleInput(this);" /> 
+<input id="source_url" name="source_url" type="text" class="field text large" value="http://github.com/.../..." maxlength="255" tabindex="5" onkeyup="handleInput(this);" onchange="handleInput(this);" /> 
 </div> 
 <p class="instruct" id="instruct7"><small>We like Open Source. Put it on github if you can.</small></p> 
 </li> 
@@ -196,7 +196,7 @@ $('form').submit(function () {
   FB.api($('#eid').val() + '/feed', 'post', {
     'message': $('#name').val(),
     'picture': $('#screenshot_url').val(),
-    'caption': $('#github_url').val(),
+    'caption': $('#source_url').val(),
     'description': $('#description').val(),
     'name': $('#name').val(),
     'link': $('#hack_url').val(),
@@ -266,9 +266,9 @@ $('form').submit(function () {
       target_id: $('#eid').val(),
       user_message: {value: 'Submit your hack.'},
     };
-    if ($('#github_url').val() && $('#github_url').val() != 'http://github.com/.../...') {
+    if ($('#source_url').val() && $('#source_url').val() != 'http://github.com/.../...') {
       data['action_links'] = [
-        { text: 'View Code', href: $('#github_url').val() },
+        { text: 'View Code', href: $('#source_url').val() },
       ];
     }
     
