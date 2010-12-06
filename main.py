@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
 import logging
-import simplejson as json
 import os
 import urllib, urllib2, urlparse
+try:
+  import simplejson as json
+except:
+  import json
 
 import wsgiref.handlers
 import facebook
@@ -108,11 +111,10 @@ class AppHandler(webapp.RequestHandler):
 
     ret = []
     for hack in hacks:
-      # hacks need a screenshot
-      if not hack.has_key('picture') :  
-        continue
+      if not hack.has_key('picture') or not hack.has_key('to') or not hack['to'].has_key('data') or not hack.has_key('message') or not hack.has_key('id'):
+         continue
 
-      people = filter(lambda x: x['id'] != eid, hack['to']['data'])
+      people = filter(lambda x: x and x.has_key('id') and x['id'] != eid, hack['to']['data'])
       msg = hack['message']
       banana = msg.split('Built by', 2)
       title = banana[0].replace('Hackathon Submission: ', '').strip()
