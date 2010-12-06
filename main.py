@@ -72,8 +72,12 @@ class UserHandler(webapp.RequestHandler):
 
 
 class AppHandler(webapp.RequestHandler):
-  def fetch(self, url, isJson=True):
-    logging.error(url)
+  def fetch(self, url, isJson=True, cached=60): # 1 minute
+    if cached:
+      if memcache.get(url):
+        return memcache.get(url)
+
+    logging.info('fetching: '+url)
     try:
       result = urllib2.urlopen(url)
     except urllib2.HTTPError, e:
@@ -81,9 +85,13 @@ class AppHandler(webapp.RequestHandler):
       raise e
 
     if isJson:
-      return json.loads(result.read())
+      ret = json.loads(result.read())
     else :
-      return result.read()
+      ret = result.read()
+
+    if cached:
+      memcache.add(url, ret, cached)
+    return ret
 
   def getAppOAuthToken(self):
     response = self.fetch('https://graph.facebook.com/oauth/access_token?' + urllib.urlencode({
