@@ -1,14 +1,22 @@
 #!/usr/bin/env python
 
 import logging
-import os
+import os, sys
 import urllib, urllib2, urlparse
 try:
   import simplejson as json
 except:
   import json
 
-from secret import Facebook
+try:
+  from secret import Facebook
+except:
+  print """You need to setup the application secret.
+
+  cp secret.py.sample secret.py
+
+Then put in your application id and secret."""
+  sys.exit()
 
 import wsgiref.handlers
 import facebook
