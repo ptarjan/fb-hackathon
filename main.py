@@ -8,17 +8,14 @@ try:
 except:
   import json
 
+from secret import Facebook
+
 import wsgiref.handlers
 import facebook
 
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import template
-
-class Facebook:
-  appId = '136348336398305'
-  secret = '8b664e5066bd0071a52bb728371f2544'
-
 
 
 class UserHandler(webapp.RequestHandler):
