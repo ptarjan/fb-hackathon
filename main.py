@@ -7,6 +7,7 @@ try:
   import simplejson as json
 except:
   import json
+from datetime import datetime
 
 try:
   from secret import Facebook
@@ -98,6 +99,8 @@ class AppHandler(webapp.RequestHandler):
     events = self.fetch('https://graph.facebook.com/'+page_id+'/events?access_token='+self.getAppOAuthToken())['data']
     for event in events:
       event['count'] = self.getHackCount(event['id'])
+      event['start_time'] = datetime.strptime(event['start_time'], "%Y-%m-%dT%H:%M:%S+0000")
+      event['end_time'] = datetime.strptime(event['end_time'], "%Y-%m-%dT%H:%M:%S+0000")
     return events
     
   def getEvent(self, eid):

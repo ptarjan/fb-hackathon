@@ -18,6 +18,13 @@ h1 {
 img {
   height: 12px;
 }
+form li span {
+  float: none;
+}
+.date {
+  display: inline-block;
+  width: 90px;
+}
   </style>
 </head> 
 <body>
@@ -33,7 +40,15 @@ img {
 <ul>
 {% for event in events %}
   <li>
-    <a href="/{{ event.id }}">{{ event.name }}</a> <a href="/{{ event.id }}/event"><img src="http://www.facebook.com/favicon.ico" /></a> <a href="/{{ event.id }}/submit">Submit Hack</a>
+  <span class="date">
+    {{ event.start_time|date:"M j Y" }} 
+  </span>
+  <a href="/{{ event.id }}">{{ event.name }}</a> 
+  <a href="/{{ event.id }}/event"><img src="http://www.facebook.com/favicon.ico" /></a> 
+  <span class="count">
+    {{ event.count }} 
+  </span>
+  <a href="/{{ event.id }}/submit">Submit Hack</a>
   </li>
 {% endfor %}
 </ul>
