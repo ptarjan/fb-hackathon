@@ -151,6 +151,9 @@ class MainHandler(AppHandler):
     }
     path = os.path.join(os.path.dirname(__file__), 'index.html')
     self.response.out.write(template.render(path, template_values))
+  
+  def post(self):
+    return self.get()
 
 
 class EventHandler(AppHandler):
@@ -164,10 +167,17 @@ class EventHandler(AppHandler):
     path = os.path.join(os.path.dirname(__file__), 'event.html')
     self.response.out.write(template.render(path, template_values))
 
+  def post(self):
+    return self.get()
+
 
 class EventRedirectHandler(webapp.RequestHandler):
   def get(self, eid):
      self.redirect('http://www.facebook.com/event.php?eid='+eid)
+
+  def post(self, eid):
+    return self.get(eid)
+
 
 class EventSubmissionHandler(AppHandler, UserHandler):
 
