@@ -45,12 +45,12 @@ form li span {
   <span class="date">
     {{ event.start_time|date:"M j Y" }} 
   </span>
-  <a href="/{{ event.id }}">{{ event.name }}</a> 
-  <a href="/{{ event.id }}/event"><img src="http://www.facebook.com/favicon.ico" /></a> 
+  <a href="{{ event.id }}">{{ event.name }}</a> 
+  <a href="{{ event.id }}/event"><img src="favicon.ico" /></a> 
   <span class="count">
     {{ event.count }} 
   </span>
-  <a href="/{{ event.id }}/submit">Submit Hack</a>
+  <a href="{{ event.id }}/submit">Submit Hack</a>
   </li>
 {% endfor %}
 </ul>
