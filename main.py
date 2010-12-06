@@ -175,8 +175,8 @@ class EventHandler(AppHandler):
     path = os.path.join(os.path.dirname(__file__), 'event.html')
     self.response.out.write(template.render(path, template_values))
 
-  def post(self):
-    return self.get()
+  def post(self, eid):
+    return self.get(eid)
 
 
 class EventRedirectHandler(webapp.RequestHandler):
