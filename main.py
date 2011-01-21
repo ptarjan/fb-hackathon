@@ -121,8 +121,8 @@ class AppHandler(webapp.RequestHandler):
   def getHacks(self, eid):
     hacks = []
     for hack in self.getRawHacks(eid):
-      if hack.has_key('attribution'):
-        if hack['attribution'] == 'Hackathon Submitter':
+      if hack.has_key('application'):
+        if hack['application']['id'] == '136348336398305':
           hacks.append(hack)
 
     ret = []
