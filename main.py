@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import collections
 import logging
 import os, sys
 import urllib, urllib2, urlparse
@@ -115,8 +116,17 @@ class AppHandler(webapp.RequestHandler):
     return self.fetch('https://graph.facebook.com/'+eid)
 
   def getRawHacks(self, eid):
-    feed = self.fetch('https://graph.facebook.com/'+str(eid)+'/feed')
-    return feed['data']
+    data = []
+    url = 'https://graph.facebook.com/'+str(eid)+'/feed'
+    while 1:
+      feed = self.fetch(url)
+      data += feed['data']
+      if feed.has_key('paging'):
+        url = feed['paging']['next']
+      else:
+        break
+
+    return data
   
   def getHacks(self, eid):
     hacks = []
@@ -131,7 +141,7 @@ class AppHandler(webapp.RequestHandler):
          continue
 
       people = filter(lambda x: x and x.has_key('id') and x['id'] != eid, hack['to']['data'])
-      msg = hack['message']
+      msg = hack.get('message')
       banana = msg.split('Built by', 2)
       title = banana[0].replace('Hackathon Submission: ', '').strip()
       other_eid, fbid = hack['id'].split('_')
@@ -140,9 +150,9 @@ class AppHandler(webapp.RequestHandler):
       ret.append({
         'title' : title,
         'people' : people,
-        'screenshot' : hack['picture'],
-        'screenshot_raw' : hack['link'],
-        'description' : hack['description'],
+        'screenshot' : hack.get('picture'),
+        'screenshot_raw' : hack.get('link'),
+        'description' : hack.get('description'),
         'link' : 'http://www.facebook.com/event.php?eid='+eid+'&story_fbid='+fbid,
       })
 
