@@ -74,11 +74,12 @@ class UserHandler(webapp.RequestHandler):
 
 class AppHandler(webapp.RequestHandler):
   def fetch(self, url, isJson=True, cached=60): # 1 minute
+    logging.info('fetching: '+url)
     if cached:
       if memcache.get(url):
         return memcache.get(url)
 
-    logging.info('fetching: '+url)
+    logging.info('cache miss: '+url)
     try:
       result = urllib2.urlopen(url)
     except urllib2.HTTPError, e:
@@ -122,6 +123,9 @@ class AppHandler(webapp.RequestHandler):
       feed = self.fetch(url)
       data += feed['data']
       if feed.has_key('paging'):
+        if url == feed['paging']['next']:
+          # bug in facebook
+          break
         url = feed['paging']['next']
       else:
         break
