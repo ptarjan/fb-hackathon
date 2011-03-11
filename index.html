@@ -12,10 +12,13 @@ h1 {
   text-indent: 0;
   color: white;
 }
-.wufoo li {
+.wufoo table {
   width: 100%;
 }
-img {
+.wufoo table td {
+  padding: 10px;
+}
+img.icon {
   height: 12px;
 }
 form li span {
@@ -42,7 +45,9 @@ form li span {
 <form class="wufoo">
 
 <div class="info">
-  <img id="logo" src="static/logo.jpg" alt="Facebook Camp Hackathon Logo" />
+  <a href="http://www.facebook.com/camphackathon">
+    <img id="logo" src="static/logo.jpg" alt="Facebook Camp Hackathon Logo" />
+  </a>
   <script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
   <div class="like_button">
     <fb:like href="http://www.facebook.com/camphackathon" show_faces="true" width="650"></fb:like>
@@ -51,20 +56,50 @@ form li span {
 
 
 
-<ul>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>School</th>
+      <th>Event</th>
+      <th>Submit</th>
+    </tr>
+  </thead>
 {% for event in events %}
-  <li>
-  <span class="date">
+  <tr>
+  <td class="date">
     {{ event.start_time|date:"M j Y" }} 
-  </span>
-  <a href="{{ event.id }}">{{ event.name }}</a> 
-  <span class="count">
-    {{ event.count }} 
-  </span>
-  <a href="{{ event.id }}/event"><img src="http://fb-hackathon.appspot.com/images/favicon.png" /></a> 
-  <a href="{{ event.id }}/submit">Submit Hack</a>
-  </li>
+  </td>
+  <td>
+    <a href="{{ event.id }}">{{ event.name }}</a> 
+  </td>
+  <td>
+    <a href="{{ event.id }}/event">
+      <img class="icon" src="http://fb-hackathon.appspot.com/images/favicon.png" />
+    </a> 
+  </td>
+  <td>
+    <a href="{{ event.id }}/submit">Submit Hack</a>
+  </td>
+  </tr>
 {% endfor %}
-</ul>
+</table>
 </div>
 <img id="bottom" src="/static/bottom.png" alt="" />
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="static/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="static/jquery.dataTables.css" />
+<script>
+$(function() {
+  $('table').dataTable({
+    "bAutoWidth": false,
+    "bFilter": false,
+    "bInfo": false,
+    "bLengthChange": true,
+    "bPaginate": false,
+    "bSort": false,
+    "aaSorting": [[ 4, "desc" ]],
+  });
+});
+</script>
