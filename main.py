@@ -108,7 +108,8 @@ class AppHandler(webapp.RequestHandler):
   def getEvents(self, page_id):
     events = self.fetch('https://graph.facebook.com/'+page_id+'/events?access_token='+self.getAppOAuthToken())['data']
     for event in events:
-      event['count'] = self.getHackCount(event['id'])
+      # too slow...
+      # event['count'] = self.getHackCount(event['id'])
       event['start_time'] = datetime.strptime(event['start_time'], "%Y-%m-%dT%H:%M:%S+0000")
       event['end_time'] = datetime.strptime(event['end_time'], "%Y-%m-%dT%H:%M:%S+0000")
     return events
@@ -167,7 +168,7 @@ class AppHandler(webapp.RequestHandler):
     return len(self.getHacks(eid))
 
 
-class MainHandler(AppHandler):
+class IndexHandler(AppHandler):
   def get(self):
     template_values = {
       'events' : self.getEvents('114869201895800')
@@ -220,7 +221,7 @@ class EventSubmissionHandler(AppHandler, UserHandler):
 
 
 def main():
-  application = webapp.WSGIApplication([('/+', MainHandler),
+  application = webapp.WSGIApplication([('/+', IndexHandler),
                                         ('/+([0-9]*)/*', EventHandler),
                                         ('/+([0-9]*)/+event', EventRedirectHandler),
                                         ('/+([0-9]*)/+submit', EventSubmissionHandler)],
