@@ -8,12 +8,14 @@
   <link rel="stylesheet" href="/static/dynamic.12380.css" type="text/css" /> 
   <link rel="stylesheet" href="/static/power.12380.css" type="text/css" /> 
   <meta property="fb:admins" content="218471" />
+  <meta property="og:image" content="http://fb-hackathon.appspot.com/static/logo.jpg" />
   <style>
 h1 {
   text-indent: 0;
   color: white;
 }
 .wufoo table {
+  margin-bottom: 20px;
   width: 100%;
 }
 .wufoo table td {
@@ -35,6 +37,9 @@ form li span {
 .like_button {
   margin-top: 50px;
   float: right;
+}
+#footer {
+  text-align: center;
 }
 </style>
 </head> 
@@ -85,8 +90,13 @@ form li span {
   </tr>
 {% endfor %}
 </table>
+
+<div id="footer">
+  This tool is <a href="https://github.com/ptarjan/fb-hackathon">Open Source</a>. 
+  Fix it for your hackathon project.
 </div>
-<img id="bottom" src="/static/bottom.png" alt="" />
+
+</div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="static/jquery.dataTables.min.js"></script>
