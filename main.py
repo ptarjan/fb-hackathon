@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
+from datetime import datetime
 import collections
 import logging
-import os, sys
+import os
+import sys
 import urllib, urllib2, urlparse
-try:
-  import simplejson as json
-except:
-  import json
-from datetime import datetime
+
+from django.utils import simplejson as json
 
 try:
   from secret import Facebook
