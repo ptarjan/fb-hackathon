@@ -7,6 +7,7 @@
 
   <link rel="stylesheet" href="/static/dynamic.12380.css" type="text/css" /> 
   <link rel="stylesheet" href="/static/power.12380.css" type="text/css" /> 
+
 </head> 
 <body>
 <style>
@@ -15,6 +16,9 @@ tr {
 }
 td {
   padding: 10px;
+}
+th.likes {
+  padding-right: 20px;
 }
 </style>
 
@@ -27,13 +31,15 @@ td {
 </div>
 
 <table>
-  <tr>
-    <th>Hackers</th>
-    <th>Title</th>
-    <th>Description</th>
-    <th>Screenshot</th>
-    <th>Likes</th>
-  </tr>
+  <thead>
+    <tr>
+      <th>Hackers</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Screenshot</th>
+      <th class="likes">Likes</th>
+    </tr>
+  </thead>
 {% for hack in hacks %}
   <tr class="hack">
     <!--
@@ -98,6 +104,21 @@ $(function() {
     $(this).children('.remove').each(function() {
       this.style.visibility = "hidden";
     });
+  });
+});
+</script>
+<script src="static/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="static/jquery.dataTables.css" />
+<script>
+$(function() {
+  $('table').dataTable({
+    "bAutoWidth": false,
+    "bFilter": false,
+    "bInfo": false,
+    "bLengthChange": true,
+    "bPaginate": false,
+    "bSort": true,
+    "aaSorting": [[ 4, "desc" ]],
   });
 });
 </script>
