@@ -137,7 +137,7 @@ class AppHandler(webapp.RequestHandler):
     hacks = []
     for hack in self.getRawHacks(eid):
       if hack.has_key('application'):
-        if hack['application']['id'] == '136348336398305':
+        if hack['application']['id'] == Facebook.appId:
           hacks.append(hack)
 
     ret = []
