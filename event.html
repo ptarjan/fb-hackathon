@@ -32,6 +32,7 @@ td {
     <th>Title</th>
     <th>Description</th>
     <th>Screenshot</th>
+    <th>Likes</th>
   </tr>
 {% for hack in hacks %}
   <tr class="hack">
@@ -55,6 +56,9 @@ td {
       <a href="{{ hack.screenshot_raw }}">
         <img src="{{ hack.screenshot }}" />
       </a>
+    </td>
+    <td>
+      {{ hack.likes }}
     </td>
   </tr>
 {% endfor %}

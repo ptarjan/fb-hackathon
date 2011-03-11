@@ -152,12 +152,13 @@ class AppHandler(webapp.RequestHandler):
       # print '\n\n', hack
 
       ret.append({
-        'title' : title,
+        'description' : hack.get('description'),
+        'link' : 'http://www.facebook.com/event.php?eid='+eid+'&story_fbid='+fbid,
+        'likes' : hack.get('likes', {'count' : 0}).get('count'),
         'people' : people,
         'screenshot' : hack.get('picture'),
         'screenshot_raw' : hack.get('link'),
-        'description' : hack.get('description'),
-        'link' : 'http://www.facebook.com/event.php?eid='+eid+'&story_fbid='+fbid,
+        'title' : title,
       })
 
     return ret
