@@ -25,7 +25,14 @@ form li span {
   display: inline-block;
   width: 90px;
 }
-  </style>
+#logo {
+  height: 150px;
+}
+.like_button {
+  margin-top: 50px;
+  float: right;
+}
+</style>
 </head> 
 <!-- commented out for app tabs
 <body> 
@@ -35,9 +42,14 @@ form li span {
 <form class="wufoo">
 
 <div class="info">
-  <h2><a href="http://www.facebook.com/camphackathon">Facebook Camp Hackathon</a></h2>
-  <div>Events</div>
+  <img id="logo" src="static/logo.jpg" alt="Facebook Camp Hackathon Logo" />
+  <script src="http://connect.facebook.net/en_US/all.js#xfbml=1"></script>
+  <div class="like_button">
+    <fb:like href="http://www.facebook.com/camphackathon" show_faces="true" width="650"></fb:like>
+  </div>
 </div>
+
+
 
 <ul>
 {% for event in events %}
