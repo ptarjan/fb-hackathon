@@ -170,7 +170,7 @@ class AppHandler(webapp.RequestHandler):
 class IndexHandler(AppHandler):
   def get(self):
     template_values = {
-      'events' : self.getEvents('114869201895800')
+      'events' : self.getEvents('167580640987') + self.getEvents('114869201895800')
     }
     path = os.path.join(os.path.dirname(__file__), 'index.html')
     self.response.out.write(template.render(path, template_values))
