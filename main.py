@@ -141,13 +141,10 @@ class AppHandler(webapp.RequestHandler):
 
     ret = []
     for hack in hacks:
-      if not hack.has_key('picture') or not hack.has_key('to') or not hack['to'].has_key('data') or not hack.has_key('message') or not hack.has_key('id'):
+      if not hack.has_key('picture') or not hack.has_key('to') or not hack['to'].has_key('data') or not hack.has_key('id'):
          continue
 
       people = filter(lambda x: x and x.has_key('id') and x['id'] != eid, hack['to']['data'])
-      msg = hack.get('message')
-      banana = msg.split('Built by', 2)
-      title = banana[0].replace('Hackathon Submission: ', '').strip()
       other_eid, fbid = hack['id'].split('_')
       # print '\n\n', hack
 
@@ -158,7 +155,7 @@ class AppHandler(webapp.RequestHandler):
         'people' : people,
         'screenshot' : hack.get('picture'),
         'screenshot_raw' : hack.get('link'),
-        'title' : title,
+        'title' : hack.get('name'),
       })
 
     return ret
