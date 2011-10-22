@@ -257,7 +257,7 @@ $('form').submit(function () {
       message: 'Hackathon Submission: '+$('#name').val()+names,
       attachment: {
         name: $('#name').val(),
-        description: $('#description').val(),
+        description: $('#description').val() + names,
         href: $('#hack_url').val(),
         media: [
           { type: 'image', src: $('#screenshot_url').val(), href: $('#screenshot_url').val() }
