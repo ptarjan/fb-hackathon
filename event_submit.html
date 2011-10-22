@@ -214,12 +214,12 @@ $('form').submit(function () {
   $('#other_hackers :selected').each(function() {
     names.push($(this).text());
   });
-  names.push('{{ me.name }}]');
+  names.push('{{ me.name }}');
   names.sort(function(a, b) {
     return a.split(':')[2] < b.split(':')[2] ? -1 : 1;
   });
 
-  names = '<br/><br/>Built by '+names.join(', ');
+  names = '.\n\nBuilt by '+names.join(', ');
 
   if (!$('#name').val()) {
     alert('A hack isn\'t very much without a catchy name.');
