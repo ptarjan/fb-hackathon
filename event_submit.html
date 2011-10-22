@@ -212,14 +212,14 @@ $('form').submit(function () {
 $('form').submit(function () {
   var names = [];
   $('#other_hackers :selected').each(function() {
-    names.push('@['+$(this).attr('name')+':2048:'+$(this).text()+']');
+    names.push($(this).text());
   });
-  names.push('@[{{ me.id }}:2048:{{ me.name }}]');
+  names.push('{{ me.name }}]');
   names.sort(function(a, b) {
     return a.split(':')[2] < b.split(':')[2] ? -1 : 1;
   });
 
-  names = '\n\nBuilt by '+names.join(', ');
+  names = '<br/><br/>Built by '+names.join(', ');
 
   if (!$('#name').val()) {
     alert('A hack isn\'t very much without a catchy name.');
@@ -254,7 +254,6 @@ $('form').submit(function () {
   img.onload = function() {
     var data = {
       method: 'stream.publish',
-      message: 'Hackathon Submission: '+$('#name').val()+names,
       attachment: {
         name: $('#name').val(),
         description: $('#description').val() + names,
