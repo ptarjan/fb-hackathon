@@ -219,7 +219,7 @@ $('form').submit(function () {
     return a.split(':')[2] < b.split(':')[2] ? -1 : 1;
   });
 
-  names = '.\n\nBuilt by '+names.join(', ');
+  names = '\n\nBuilt by '+names.join(', ');
 
   if (!$('#name').val()) {
     alert('A hack isn\'t very much without a catchy name.');
@@ -250,13 +250,18 @@ $('form').submit(function () {
   }
 
   var img = document.createElement('img');
+  var description = $('#description').val();
+  if (description.charAt(description.length) !== ".") {
+    description += '.';
+  }
+  description += names;
 
   img.onload = function() {
     var data = {
       method: 'stream.publish',
       attachment: {
         name: $('#name').val(),
-        description: $('#description').val() + names,
+        description: description,
         href: $('#hack_url').val(),
         media: [
           { type: 'image', src: $('#screenshot_url').val(), href: $('#screenshot_url').val() }
