@@ -150,7 +150,7 @@ class AppHandler(webapp.RequestHandler):
 
       ret.append({
         'description' : hack.get('description'),
-        'link' : 'http://www.facebook.com/event.php?eid='+eid+'&story_fbid='+fbid,
+        'link' : 'http://www.facebook.com/permalink.php?id='+eid+'&story_fbid='+fbid,
         'likes' : hack.get('likes', {'count' : 0}).get('count'),
         'people' : people,
         'screenshot' : hack.get('picture'),

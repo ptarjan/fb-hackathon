@@ -37,7 +37,6 @@ th.likes {
 <table>
   <thead>
     <tr>
-      <th>Hackers</th>
       <th>Title</th>
       <th>Description</th>
       <th>Screenshot</th>
@@ -49,13 +48,6 @@ th.likes {
     <!--
     <input type="button" class="remove" value="Remove" style="visibility:hidden" />
     -->
-    <td>
-    {% for person in hack.people %}
-      <a href="http://www.facebook.com/profile.php?id={{ person.id }}">
-        <img src="http://graph.facebook.com/{{ person.id }}/picture" title="{{ person.name }}" alt="{{ person.name }}" />
-      </a>
-    {% endfor %}
-    </td>
     <td>
       <a target="_new" href="{{ hack.link }}">{{ hack.title|truncatewords:"10" }}</a>
     </td>
