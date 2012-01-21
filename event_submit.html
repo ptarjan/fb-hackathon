@@ -167,7 +167,7 @@ style="display:block !important;visibility:visible !important;text-indent:0 !imp
 <script>
 window.fbAsyncInit = function() {
   FB.Event.subscribe('auth.login', function(response) {
-    if (response.session) {
+    if (response.authResponse) {
       // Get the friends (I don't care about people with 0 friends)
       if (jQuery('#other_hackers').children().length == 0) {
         document.location.reload();
