@@ -41,7 +41,7 @@ Hack Submission
 </div> 
 
 <div id="login">
-  <fb:login-button show-faces="true" width="600"></fb:login-button> 
+  <fb:login-button show-faces="true" width="600" scope="publish_stream"></fb:login-button> 
 </div>
 
 <div id="error">
@@ -166,21 +166,30 @@ style="display:block !important;visibility:visible !important;text-indent:0 !imp
 <div id="fb-root"></div>
 <script>
 window.fbAsyncInit = function() {
-  FB.Event.subscribe('auth.login', function(response) {
-    if (response.authResponse) {
-      // Get the friends (I don't care about people with 0 friends)
-      if (jQuery('#other_hackers').children().length == 0) {
-        document.location.reload();
-      } else {
-        {% if isAttending %}
-        jQuery('#hack_form').show();
-        {% else %}
-        jQuery('#error').show();
-        {% endif %}
-      }
+  FB.init({appId: '136348336398305', status: true, cookie: true, xfbml: true});
+  FB.getLoginStatus(function(response) {
+    if (response.status === 'connected') {
+      onLogin();
     }
   });
-  FB.init({appId: '136348336398305', status: true, cookie: true, xfbml: true});
+  FB.Event.subscribe('auth.login', function(response) {
+    if (response.authResponse || response.session) {
+      onLogin();
+    }
+  });
+
+  var onLogin = function() {
+    // Get the friends (I don't care about people with 0 friends)
+    if (jQuery('#other_hackers').children().length == 0) {
+      document.location.reload();
+    } else {
+      {% if isAttending %}
+      jQuery('#hack_form').show();
+      {% else %}
+      jQuery('#error').show();
+      {% endif %}
+    }
+  }
 };
 (function() {
   var e = document.createElement('script'); e.async = true;
@@ -191,24 +200,7 @@ window.fbAsyncInit = function() {
 
 <script>
 jQuery.noConflict()(function($) {
-/*
-$('form').submit(function () {
-  FB.api($('#eid').val() + '/feed', 'post', {
-    'message': $('#name').val(),
-    'picture': $('#screenshot_url').val(),
-    'caption': $('#source_url').val(),
-    'description': $('#description').val(),
-    'name': $('#name').val(),
-    'link': $('#hack_url').val(),
-  }, function(response) {
-    if (typeof response.error !== "undefined") {
-      alert(response.error.message);
-    }
-    console.log(response)
-  });
-  return false;
-});
-*/
+  
 $('form').submit(function () {
   var names = [];
   $('#other_hackers :selected').each(function() {
@@ -257,6 +249,7 @@ $('form').submit(function () {
   description += names;
 
   img.onload = function() {
+    /*
     var data = {
       method: 'stream.publish',
       attachment: {
@@ -278,6 +271,60 @@ $('form').submit(function () {
     
     FB.ui(data, function(response) {
       if (response && response.post_id) {
+        alert('Submission was published. Go get everyone to like it to win the Community Choice prize.');
+        window.location = '/{{ eid }}';
+      } else {
+        alert('Failed. Was everything filled out (and were all the URLs valid)?');
+      }
+    });
+    */
+
+    /*
+    var data = {
+      'message': $('#name').val(),
+      'link': $('#hack_url').val(),
+      'picture': $('#screenshot_url').val(),
+      'name': $('#name').val(),
+      'description': $('#description').val(),
+    };
+    if ($('#source_url').val() && $('#source_url').val() != 'http://github.com/.../...') {
+      data['actions'] = [
+        { name: 'View Code', link: $('#source_url').val() },
+      ];
+    }
+    
+    FB.api($('#eid').val() + '/feed', 'post', data, function(response) {
+      if (typeof response.error !== "undefined") {
+        alert(response.error.message);
+      }
+      console.log(response)
+      window.location = '/{{ eid }}';
+    });
+
+    */
+    
+    var data = {
+      method: 'stream.publish',
+      message: $('#name').val() + '\n' + description + '\nImage: ' + $('#screenshot_url').val() + '\nLink: ' + $('#hack_url').val(),
+      attachment: {
+        caption: $('#name').val(),
+        name: $('#name').val(),
+        description: description,
+        href: $('#hack_url').val(),
+        media: [
+          { type: 'image', src: $('#screenshot_url').val(), href: $('#screenshot_url').val() }
+        ],
+      },
+      target_id: $('#eid').val(),
+    };
+    if ($('#source_url').val() && $('#source_url').val() != 'http://github.com/.../...') {
+      data['action_links'] = [
+        { text: 'View Code', href: $('#source_url').val() },
+      ];
+    }
+    
+    FB.api(data, function(response) {
+      if (response) {
         alert('Submission was published. Go get everyone to like it to win the Community Choice prize.');
         window.location = '/{{ eid }}';
       } else {

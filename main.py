@@ -6,6 +6,7 @@ import logging
 import os
 import sys
 import urllib, urllib2, urlparse
+import re
 
 from django.utils import simplejson as json
 
@@ -135,12 +136,43 @@ class AppHandler(webapp.RequestHandler):
   def getHacks(self, eid):
     hacks = []
     for hack in self.getRawHacks(eid):
-      if hack.has_key('application'):
-        if hack['application']['id'] == Facebook.appId:
-          hacks.append(hack)
+      hacks.append(hack)
+
 
     ret = []
     for hack in hacks:
+
+      ## HACK
+      if not hack.has_key('message'):
+        continue
+      message = hack.get('message')
+      boom = message.split('\n', 1)
+      if len(boom) != 2:
+          continue
+      title, description = boom
+      description = re.sub('Image:.*', '', description)
+      description = re.sub('Link:.*', '', description)
+      search = re.search('Image: (.*)', message)
+      if not search:
+          continue
+      screenshot = search.group(1)
+      
+      search = re.search('Link: (.*)', message)
+      if not search:
+          continue
+      link = search.group(1)
+      other_eid, fbid = hack['id'].split('_')
+
+      ret.append({
+        'description' : description,
+        'link' : 'http://www.facebook.com/permalink.php?id='+eid+'&story_fbid='+fbid,
+        'likes' : hack.get('likes', {'count' : 0}).get('count'),
+        'screenshot' : screenshot,
+        'screenshot_raw' : link,
+        'title' : title,
+      })
+
+      """
       if not hack.has_key('picture') or not hack.has_key('to') or not hack['to'].has_key('data') or not hack.has_key('id'):
          continue
 
@@ -157,6 +189,7 @@ class AppHandler(webapp.RequestHandler):
         'screenshot_raw' : hack.get('link'),
         'title' : hack.get('name'),
       })
+      """
 
     return ret
 
