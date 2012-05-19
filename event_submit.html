@@ -11,6 +11,8 @@ Hack Submission
 <!-- CSS --> 
 <link rel="stylesheet" href="/static/dynamic.12380.css" type="text/css" /> 
 <link rel="stylesheet" href="/static/power.12380.css" type="text/css" /> 
+<link rel="stylesheet" href="/static/jquery.facebook.multifriend.select.css" />
+
 <style>
 #hack_form {
   display: none;
@@ -24,6 +26,9 @@ Hack Submission
   padding: 10px;
   text-align: center;
   display: none;
+}
+div#jfmfs-friend-selector {
+  width: 100%;
 }
 </style>
  
@@ -133,15 +138,10 @@ Screenshot URL
 <label class="desc" id="title9" for="other_hackers"> 
 Other Hackers
 </label>
-<div> 
-<select id="other_hackers" name="other_hackers" class="field large" tabindex="7" multiple>
-{% for friend in friends %}
-<option name="{{ friend.id }}">{{ friend.name }}</option>
-{% endfor %}
-</select>
-</div> 
 
-<p class="instruct" id="instruct9"><small>Who else built this with you? Hold Control or ⌘ to select multiple.</small></p> 
+<div id="jfmfs-container" name="other_hackers"></div>
+
+<p class="instruct" id="instruct9"><small>Who else built this with you?</small></p> 
 </li> 
  
  
@@ -163,8 +163,12 @@ style="display:block !important;visibility:visible !important;text-indent:0 !imp
 </a>
 
 <script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+<script src="/static/jquery.facebook.multifriend.select.min.js"></script>
+
 <div id="fb-root"></div>
 <script>
+jQuery.noConflict()(function($) {
+  
 window.fbAsyncInit = function() {
   FB.init({appId: '136348336398305', status: true, cookie: true, xfbml: true});
   FB.getLoginStatus(function(response) {
@@ -179,16 +183,13 @@ window.fbAsyncInit = function() {
   });
 
   var onLogin = function() {
-    // Get the friends (I don't care about people with 0 friends)
-    if (jQuery('#other_hackers').children().length == 0) {
-      document.location.reload();
-    } else {
-      {% if isAttending %}
-      jQuery('#hack_form').show();
-      {% else %}
-      jQuery('#error').show();
-      {% endif %}
-    }
+    $("#jfmfs-container").jfmfs();
+
+    {% if isAttending %}
+    jQuery('#hack_form').show();
+    {% else %}
+    jQuery('#error').show();
+    {% endif %}
   }
 };
 (function() {
@@ -196,16 +197,17 @@ window.fbAsyncInit = function() {
   e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
   document.getElementById('fb-root').appendChild(e);
 }());
-</script>
-
-<script>
-jQuery.noConflict()(function($) {
   
 $('form').submit(function () {
   var names = [];
-  $('#other_hackers :selected').each(function() {
-    names.push($(this).text());
-  });
+  var friendSelector = $("#jfmfs-container").data('jfmfs');
+  var friends = friendSelector.getSelectedIdsAndNames();
+  for (var i in friends) {
+    var name = friends[i].name;
+    if (name) {
+      names.push(friends[i].name);
+    }
+  }
   names.push('{{ me.name }}');
   names.sort(function(a, b) {
     return a.split(':')[2] < b.split(':')[2] ? -1 : 1;

@@ -120,6 +120,7 @@ class AppHandler(webapp.RequestHandler):
   def getRawHacks(self, eid):
     data = []
     url = 'https://graph.facebook.com/'+str(eid)+'/feed?access_token='+self.getAppOAuthToken()
+    # print "\n\n"+url
     while 1:
       feed = self.fetch(url)
       data += feed['data']
