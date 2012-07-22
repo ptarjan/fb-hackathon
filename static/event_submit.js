@@ -53,7 +53,8 @@ $('form').submit(function () {
 
   var img = document.createElement('img');
   var description = $('#description').val();
-  if (description.charAt(description.length) !== ".") {
+  description = jQuery.trim(description);
+  if (description.charAt(description.length-1) !== ".") {
     description += '.';
   }
   description += names;
