@@ -91,7 +91,6 @@ $('form').submit(function () {
     */
 
     var data = {
-      'message': $('#name').val(),
       'link': $('#hack_url').val(),
       'picture': $('#screenshot_url').val(),
       'name': $('#name').val(),
