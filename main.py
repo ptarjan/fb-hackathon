@@ -110,12 +110,12 @@ class AppHandler(webapp.RequestHandler):
     for event in events:
       # too slow...
       # event['count'] = self.getHackCount(event['id'])
-      event['start_time'] = datetime.strptime(event['start_time'], "%Y-%m-%dT%H:%M:%S+0000")
-      event['end_time'] = datetime.strptime(event['end_time'], "%Y-%m-%dT%H:%M:%S+0000")
+      event['start_time'] = datetime.strptime(event['start_time'], "%Y-%m-%dT%H:%M:%S")
+      event['end_time'] = datetime.strptime(event['end_time'], "%Y-%m-%dT%H:%M:%S")
     return events
     
   def getEvent(self, eid):
-    return self.fetch('https://graph.facebook.com/'+eid)
+    return self.fetch('https://graph.facebook.com/'+eid+'?access_token='+self.getAppOAuthToken())
 
   def getRawHacks(self, eid):
     data = []
@@ -142,38 +142,40 @@ class AppHandler(webapp.RequestHandler):
 
     ret = []
     for hack in hacks:
-
-      ## HACK
-      if not hack.has_key('message'):
+      if not hack.has_key('application') or hack['application']['id'] != Facebook.appId:
         continue
-      message = hack.get('message')
-      boom = message.split('\n', 1)
-      if len(boom) != 2:
-          continue
-      title, description = boom
-      description = re.sub('Image:.*', '', description)
-      description = re.sub('Link:.*', '', description)
-      search = re.search('Image: (.*)', message)
-      if not search:
-          continue
-      screenshot = search.group(1)
-      
-      search = re.search('Link: (.*)', message)
-      if not search:
-          continue
-      link = search.group(1)
-      other_eid, fbid = hack['id'].split('_')
 
-      ret.append({
-        'description' : description,
-        'link' : 'http://www.facebook.com/permalink.php?id='+eid+'&story_fbid='+fbid,
-        'likes' : hack.get('likes', {'count' : 0}).get('count'),
-        'screenshot' : screenshot,
-        'screenshot_raw' : link,
-        'title' : title,
-      })
+      if not hack.has_key('picture'):
+          ## non-structrued format
+          if not hack.has_key('message'):
+            continue
+          message = hack.get('message')
+          boom = message.split('\n', 1)
+          if len(boom) != 2:
+              continue
+          title, description = boom
+          description = re.sub('Image:.*', '', description)
+          description = re.sub('Link:.*', '', description)
+          search = re.search('Image: (.*)', message)
+          if not search:
+              continue
+          screenshot = search.group(1)
+          
+          search = re.search('Link: (.*)', message)
+          if not search:
+              continue
+          link = search.group(1)
+          other_eid, fbid = hack['id'].split('_')
 
-      """
+          ret.append({
+            'description' : description,
+            'link' : 'http://www.facebook.com/permalink.php?id='+eid+'&story_fbid='+fbid,
+            'likes' : hack.get('likes', {'count' : 0}).get('count'),
+            'screenshot' : screenshot,
+            'screenshot_raw' : link,
+            'title' : title,
+          })
+
       if not hack.has_key('picture') or not hack.has_key('to') or not hack['to'].has_key('data') or not hack.has_key('id'):
          continue
 
@@ -190,7 +192,6 @@ class AppHandler(webapp.RequestHandler):
         'screenshot_raw' : hack.get('link'),
         'title' : hack.get('name'),
       })
-      """
 
     return ret
 
